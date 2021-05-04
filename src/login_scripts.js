@@ -1,4 +1,6 @@
 const axios = require("axios")
+const path = require("path");
+
 function login(){
     const token = document.getElementById('token').value;
     axios.get("http://localhost:5000/auth/token/"+token)
