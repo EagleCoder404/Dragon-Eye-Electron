@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/moment-with-locales.js"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <title>Lobby</title>
 </head>
@@ -33,12 +34,12 @@
     </div>
 
     <script>
-        const start_time = sessionStorage.getItem('start_time')
-        const end_time = sessionStorage.getItem('end_time')
+        const start_time = moment(sessionStorage.getItem('start_time'))
+        const end_time = moment(sessionStorage.getItem('end_time'))
         const session_name = sessionStorage.getItem('name')
         
-        document.getElementById("start_time").innerHTML = start_time
-        document.getElementById("end_time").innerHTML = end_time
+        document.getElementById("start_time").innerHTML = start_time.format("LLL")
+        document.getElementById("end_time").innerHTML = end_time.format("LLL")
         document.getElementById("session_name").innerHTML = session_name
         
     </script>
