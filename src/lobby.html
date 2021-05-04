@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <title>Lobby</title>
+</head>
+<body>
+
+    <div class="max-w-2xl mx-auto">
+        <div class='mx-auto max-w-lg border rounded-md border-green-400 mt-6'>
+            <div class=" p-6 text-3xl font-bold border-b text-gray-500 border-green-400 rounded-t-md ">
+                <h1 id='session_name'>
+
+                </h1>
+            </div>
+            <div class=" p-6 flex flex-col space-y-3">
+                <div class="font-light">
+                    Start Time <span id='start_time'></span>
+                </div>
+                <div class="font-light">
+                    End Time <span id='end_time'></span>
+                </div>
+
+                <div class='flex flex-row space-x-3'>
+                    <button class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400">Set Reminder</button>
+                    <button class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400">Join</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const start_time = sessionStorage.getItem('start_time')
+        const end_time = sessionStorage.getItem('end_time')
+        const session_name = sessionStorage.getItem('name')
+        
+        document.getElementById("start_time").innerHTML = start_time
+        document.getElementById("end_time").innerHTML = end_time
+        document.getElementById("session_name").innerHTML = session_name
+        
+    </script>
+</body>
+</html>
