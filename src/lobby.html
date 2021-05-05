@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="../assets/js/moment-with-locales.js"></script>
+    <script src="../assets/js/jquery.js" type="text/javascript"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script>if (window.module) module = window.module;</script>
     <title>Lobby</title>
 </head>
 <body>
@@ -27,21 +30,24 @@
 
                 <div class='flex flex-row space-x-3'>
                     <button class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400">Set Reminder</button>
-                    <a class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400" href='exam.html'>Join</a>
+                    <a class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400" href='exam.html' id='joinBtn'>Join</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const start_time = moment(sessionStorage.getItem('start_time'))
-        const end_time = moment(sessionStorage.getItem('end_time'))
-        const session_name = sessionStorage.getItem('name')
-        
-        document.getElementById("start_time").innerHTML = start_time.format("LLL")
-        document.getElementById("end_time").innerHTML = end_time.format("LLL")
-        document.getElementById("session_name").innerHTML = session_name
-        
+        $(document).ready(()=>{
+            const start_time = moment(sessionStorage.getItem('start_time'))
+            const end_time = moment(sessionStorage.getItem('end_time'))
+            const session_name = sessionStorage.getItem('name')
+            $("#start_time").text(start_time.format("LLL"))
+            $("#end_time").text(end_time.format("LLL"))
+            $("#session_name").text(session_name)
+
+            if(moment() > end_time)
+                $("#joinBtn").addClass('hidden')
+        })
     </script>
 </body>
 </html>
