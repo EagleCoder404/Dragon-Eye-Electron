@@ -3,7 +3,7 @@ const path = require("path");
 
 function login(){
     const token = document.getElementById('token').value;
-    axios.get("http://localhost:5000/auth/token/"+token)
+    axios.get("http://dragon-eye.herokuapp.com/auth/token/"+token)
     .then( data => {
         const response = data.data;
         if( response.msg === 'GOOD_TOKEN')

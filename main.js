@@ -16,8 +16,11 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('src/login.html')
+  mainWindow.loadFile('src/firstpage.html')
   mainWindow.webContents.openDevTools()
+  mainWindow.setFullScreen(true)
+	mainWindow.show()
+  // and load the index.html of the app.
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
