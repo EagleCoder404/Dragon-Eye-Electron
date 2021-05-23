@@ -1,0 +1,13 @@
+<script>
+    const {PythonShell} = require("python-shell")
+
+    let options = {
+        args: ['harsha']
+      };
+      
+      PythonShell.run('src/test.py', options, function (err, results) {
+        if (err) throw err;
+        console.log(results);
+      });
+
+</script>
