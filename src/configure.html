@@ -23,6 +23,9 @@
 			<li id="tick2div">STEP 2<br/><img src="x-mark.png" id="tick2"></li>
 			<li id="tick3div">STEP 3<br/><img src="x-mark.png" id="tick3"></li>
 		</ul>
+		<div class='container p-3 text-center'>
+			<a href="exam.html" id='exam-button' class='d-none btn btn-lg btn-success'>Start Exam</a>
+		</div>
 		<h3>STEP 1</h3>
 		<div class="card card0 border-0" style="margin-bottom:5%;" id="div1">
 			<div style="width:90%;margin:5% auto;text-align:center">
@@ -80,8 +83,10 @@
 					<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-analytics.js"></script>
 					<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
 					<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
-
+					<script src="lemons.js"></script>
 					<script>
+						const token = sessionStorage.getItem("token")
+						const studentAPI = createStudentApi(token)
 					  var imgname,imgurl;
 					  var files=[];
 					  var reader;
@@ -138,8 +143,9 @@
 							uploadtask.snapshot.ref.getDownloadURL().then(function(url){
 									imgurl=url;
 									console.log("THIS ONE--=>"+imgurl);
-						
-							swal("UPLOADED SUCCESSFULLY");
+									studentAPI.post("/id_card", data={link:imgurl})
+									.then( r => swal("ID UPLOADED"))
+									.catch(r => console.log("Error Occured With ID upload"))
 								
 							});
 							
@@ -147,6 +153,7 @@
 						document.getElementById("buttonstuff").style.display="none";
 						document.getElementById("sympathy").style.display="block";
 						document.getElementById("tick3").src="checked.png";
+						document.getElementById("exam-button").classList.remove("d-none");
 					}else{
 						swal("SELECT PHOTO FIRST");
 					}
