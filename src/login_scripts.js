@@ -26,4 +26,5 @@ function login(){
         else
             alert(response.msg)
     })
+	document.getElementById("lobby").style.display="block";
 }
