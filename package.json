@@ -18,10 +18,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "electron-remote": "^1.3.0",
-<<<<<<< HEAD
-    "python-shell": "file:python-shell"
-=======
     "python-shell": "^3.0.0"
->>>>>>> 1d987ca7338e4a5767635916ec70d6225f84ca7d
   }
 }
