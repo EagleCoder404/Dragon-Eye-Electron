@@ -1,9 +1,9 @@
 const axios = require("axios")
 const path = require("path");
-
 function login(){
     const token = document.getElementById('token').value;
-    axios.get("http://dragon-eye.herokuapp.com/auth/token/"+token)
+    const backend = createStudentApi(token)
+    backend.get("http://dragon-eye.herokuapp.com/auth/token")
     .then( data => {
         const response = data.data;
         if( response.msg === 'GOOD_TOKEN')
@@ -16,7 +16,11 @@ function login(){
             sessionStorage.setItem('id', ps.id)
             sessionStorage.setItem('start_time', ps.start_time)
             sessionStorage.setItem('name', ps.name)
-
+            if(ps.submitted === true)
+            {
+                alert("Answers Submitted Bruh");
+                return;
+            }
             window.location.href = 'lobby.html';
         }
         else if( response.msg === "BAD_TOKEN")

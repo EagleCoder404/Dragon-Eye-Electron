@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../assets/js/moment-with-locales.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../assets/js/moment-with-locales.js"></script>
 	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="firstpage.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="firstpage.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
 	<title>Configration setting</title>
 	<link rel="stylesheet" href="firstpage.css">
 </head>
-<body>
-    <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
-    <div class="card card0 border-0">
-			<div class="row d-flex">
-				<div class="col p-4">
-					<div class="card2 card border-0 px-4 py-5" style="margin-top:10%;">
-						<h1>The new exam page</h1>
-					</div>
-					<div class='exam-box'>
-						<div class='exam-questions-box'>
 
-						</div>
-					</div>
-						
+<body>
+	<div class="container-fluid  my-3 mx-auto">
+		<div class="card card0 border-0 p-5">
+			<div class='exam-box '>
+				<div class='exam-questions-box '>
+
 				</div>
 			</div>
-			
+			<div>
+				<button class='btn btn-success' onclick="submit(event)">Submit</button>
+				<button class='btn btn-outline-info '>Reset Answers</button>
+			</div>
 		</div>
 	</div>
 
 	<div id='templates' class='d-none'>
-		<div class='question-template'>
-			<h1 class='question-text'>Question Text</h1>
-			<input type="text" placeholder="Enter Answer Here" class='answer-input'>
+		<div class='question-template mb-5'>
+			<h4 class='question-text'>Question Text</h1>
+				<input type="text" placeholder="Enter Answer Here" class='answer-input'>
 		</div>
 	</div>
+
 	<script src="lemons.js"></script>
 	<script>
 		const jq = require("jquery");
@@ -49,41 +54,49 @@
 		const token = sessionStorage.getItem("token")
 		const backend = createStudentApi(token)
 		let old_updates_list = {}
-		
+
 		jq(document).ready(init)
-		
-		async function init(){
+
+		function submit(event){
+			event.preventDefault()
+			backend.get("/exam/submit").then( e => {
+				if(e.data.msg === "done")
+					window.location.href = "firstpage.html"
+			})
+
+		}
+		async function init() {
 			const data = await getAllQuestionData()
 			if (data == null)
 				return;
-			const n = createQuestions( data )
+			const n = createQuestions(data)
 			old_updates_list = new Array(n)
-			if( data.data?.answer_data !== undefined)
-			{
+			if (data.data?.answer_data !== undefined) {
 				const ad = data.data.answer_data
-				for(let i=0;i<ad.length;i++)	
+				for (let i = 0; i < ad.length; i++)
 					old_updates_list[i] = ad[i].answer
 			}
 			jq(".exam-questions-box .answer-input").focusout(dynamicUpdate)
 		}
-		
-		function dynamicUpdate(e){
+
+		function dynamicUpdate(e) {
 			const answer_input = e.target
 			const new_update = answer_input.value
 			const question_tag = jq(answer_input).parents(".question-template")
 			const question_id = question_tag.attr("data-question-id")
-			if( old_updates_list[question_id] !== new_update ){
-				const answer_update_data = {id:question_id, answer:new_update}
+			if (old_updates_list[question_id] !== new_update) {
+				const answer_update_data = { id: question_id, answer: new_update }
 				syncUpdatesToBackend([answer_update_data])
 				old_updates_list[question_id] = new_update
 			}
 		}
 		function syncUpdatesToBackend(answer_update_datas) {
-			backend.post("/exam/update", data={data:answer_update_datas})
-			.then( r => console.log(r))
-			.catch( r => console.log(r))
+			backend.post("/exam/update", data = { data: answer_update_datas })
+				.then(r => console.log(r))
+				.catch(r => console.log(r))
 		}
-		function questionTag(question_text, question_id, answer){
+
+		function questionTag(question_text, question_id, answer) {
 			console.log(question_text, question_id, answer)
 			const question_component = jq("#templates .question-template").clone()
 			jq(question_component).find(".question-text").text(question_text)
@@ -91,37 +104,37 @@
 			question_component.attr("data-question-id", question_id)
 			return question_component
 		}
-		function createQuestions(data){
+
+		function createQuestions(data) {
 			const answer_data = data.data?.answer_data
 			const question_data = data.data.exam_questions
 			const n = question_data.length
-			for(let i=0; i<n ;i++){
+			for (let i = 0; i < n; i++) {
 				const current_question = question_data[i]
 				const question_text = current_question.question_text
 				const question_id = current_question.id
 				let answer_text = ""
-				if(answer_data !== undefined)
+				if (answer_data !== undefined)
 					answer_text = answer_data[i].answer
 				const question_tag = questionTag(question_text, question_id, answer_text)
 				jq(".exam-questions-box").append(question_tag)
 			}
 			return n
 		}
-		async function getAllQuestionData(){
+		async function getAllQuestionData() {
 			const response = await backend("/exam/question/get")
-			if(response.status == 200)
+			if (response.status == 200)
 				return response.data
-			else if(response.status == 204)
-			{
+			else if (response.status == 204) {
 				alert("Questions has not been added to this test yet... inform your very responsible proctor")
 				return
 			}
-			else
-			{
+			else {
 				alert("Server Error, we're really sorry!!")
 				return
 			}
 		}
 	</script>
 </body>
+
 </html>
