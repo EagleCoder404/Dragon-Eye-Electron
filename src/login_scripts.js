@@ -3,6 +3,11 @@ const path = require("path");
 function login(){
     const token = document.getElementById('token').value;
     const backend = createStudentApi(token)
+    backend.interceptors.response.use(undefined, err => {
+        const error = err.response;
+        if (error.status===401)
+            swal("Authentication Error")
+        });
     backend.get("http://dragon-eye.herokuapp.com/auth/token")
     .then( data => {
         const response = data.data;
@@ -18,17 +23,19 @@ function login(){
             sessionStorage.setItem('name', ps.name)
             if(ps.submitted === true)
             {
-                alert("Answers Submitted Bruh");
+                
+                swal("You have submitted already");
                 return;
             }
             window.location.href = 'lobby.html';
         }
         else if( response.msg === "BAD_TOKEN")
-            alert("Token Probably Has Typos")
+        swal("Token Probably Has Typos")
         else if( response.msg === "TOKEN_EXPIRE")
-            alert("The Test has ended")
+        swal("The Test has ended")
         else
-            alert(response.msg)
-    })
+        swal(response.msg)
+    }).catch( r => console.log(r) )
+    
 	document.getElementById("lobby").style.display="block";
 }
