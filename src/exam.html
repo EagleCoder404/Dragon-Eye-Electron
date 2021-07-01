@@ -50,7 +50,7 @@
 	<script src="lemons.js"></script>
 	<script>
 		const jq = require("jquery");
-
+		const {ipcRenderer} = require("electron");
 		const token = sessionStorage.getItem("token")
 		const backend = createStudentApi(token)
 		let old_updates_list = {}
@@ -67,11 +67,13 @@
 		}
 		async function init() {
 			const data = await getAllQuestionData()
+			const end_time = sessionStorage.getItem("end_time")
+			ipcRenderer.send("set-exam-timeout", end_time)
 			if (data == null)
 				return;
 			const n = createQuestions(data)
 			old_updates_list = new Array(n)
-			if (data.data?.answer_data !== undefined) {
+			if ( data.data?.answer_data !== undefined ) {
 				const ad = data.data.answer_data
 				for (let i = 0; i < ad.length; i++)
 					old_updates_list[i] = ad[i].answer
@@ -99,7 +101,7 @@
 		function questionTag(question_text, question_id, answer) {
 			console.log(question_text, question_id, answer)
 			const question_component = jq("#templates .question-template").clone()
-			jq(question_component).find(".question-text").text(question_text)
+			jq(question_component).find(".question-text").html(question_text)
 			jq(question_component).find(".answer-input").val(answer)
 			question_component.attr("data-question-id", question_id)
 			return question_component

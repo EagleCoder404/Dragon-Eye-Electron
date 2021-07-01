@@ -61,6 +61,16 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-
+function endExam(){
+  app.quit()
+}
 
 ipcMain.on("suicide", e => app.quit())
+
+ipcMain.on("set-exam-timeout", (e, et) => {
+  const end_time = new Date(et)
+  const current_time = new Date()
+  console.log(end_time, current_time)
+  console.log("App will time out at " + ((end_time - current_time)/1000/60) + " minutes")
+  setTimeout(endExam, end_time - current_time)
+})
