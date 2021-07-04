@@ -53,6 +53,11 @@
 		}
 
 	</script>
-	
+	<script src="lemons.js"></script>
+	<script>
+		const fs = require("fs")
+		runPython("facial/exam_background.py", [])
+		setTimeout(() => fs.writeFileSync('stop_proctoring_features', 'true'), 6000)
+	</script>
   </body>
 </html>

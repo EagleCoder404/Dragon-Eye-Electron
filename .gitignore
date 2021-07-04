@@ -4,3 +4,5 @@ facial/.idea
 facial/le.pickle
 facial/recognizer.pickle
 facial/database/abhilash
+facial/screenshots/*
+__pycache__
