@@ -3,6 +3,10 @@ facial/model
 facial/.idea
 facial/le.pickle
 facial/recognizer.pickle
-facial/database/abhilash
+facial/database/user
+facial/database/unknown
 facial/screenshots/*
+facial/conflict/noface/*
+facial/conflict/multiface/*
+
 __pycache__
