@@ -26,7 +26,7 @@ function runPython(path, args){
       };
 	  
 	PythonShell.run(path, options, function (err, results) {
-		if (err) throw err;
+		if (err){ ; console.log(results); throw err;}
 		console.log(results);
 	});
 }
