@@ -9,12 +9,13 @@ def get_bounding_box(frame, face_detector):
     face_detections = face_detector.forward()
     
     max_confidence = 0
-    max_confidence_bbox = {}
-
+    max_confidence_bbox = []
+    # bboxes = []
     for i in range(0, face_detections.shape[2]):
         confidence = face_detections[0, 0, i, 2]
-        if confidence >= 0.75 and (confidence > max_confidence):
+        # if confidence >= 0.75 and (confidence > max_confidence):
+        if confidence >= 0.75:
             box = face_detections[0, 0, i, 3:7] * np.array([w, h, w, h])
             (startX, startY, endX, endY) = box.astype("int")
-            max_confidence_bbox = { "startX":startX, "startY":startY, "endX":endX, "endY":endY , "confidence":confidence}
+            max_confidence_bbox.append({ "startX":startX, "startY":startY, "endX":endX, "endY":endY , "confidence":confidence})
     return max_confidence_bbox

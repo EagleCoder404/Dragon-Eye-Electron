@@ -39,9 +39,9 @@ def face_alignment_detector(img, detector, predictor):
     rects = detector(gray, 1)
 
     if(len(rects)<1):
-        return "No face detected"
+        return None
     elif(len(rects)>1):
-        return "multiple face detected"
+        return None
             
     for rect in rects:
 

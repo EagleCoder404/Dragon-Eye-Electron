@@ -17,7 +17,7 @@ function createStudentApi(token){
 	});
 	return axios_instance
 }
-
+done=false
 function runPython(path, args){
     const {PythonShell} = require("python-shell")
 
@@ -25,8 +25,17 @@ function runPython(path, args){
         args: args
       };
 	  
-	PythonShell.run(path, options, function (err, results) {
+	return PythonShell.run(path, options, function (err, results) {
 		if (err){ ; console.log(results); throw err;}
 		console.log(results);
+		done=true
 	});
 }
+
+function sleep(milliseconds) {
+	const date = Date.now();
+	let currentDate = null;
+	do {
+	  currentDate = Date.now();
+	} while (currentDate - date < milliseconds);
+  }

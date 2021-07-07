@@ -1,7 +1,10 @@
 
 const {app, BrowserWindow} = require('electron')
+const screenshot = require("screenshot-desktop")
 const path = require('path')
+const fs = require("fs")
 const {ipcMain} = require("electron")
+
 let aggresiveTakeoverId = null;
 let mainWindow;
 
@@ -20,21 +23,12 @@ function createWindow () {
   })
   // and load the index.html of the app.
   init()
-
-  mainWindow.on("blur", () => {
-    const screenshot = require("screenshot-desktop")
-    const fs = require("fs")
-    const par_dir = "facial/screenshots/"
-    const filename = `${Date()}.png`
-    fs.appendFileSync(par_dir+filename, "", (e, d) => {if(e) console.log(e)})
-    screenshot({filename: par_dir+filename})
-  })
   mainWindow.loadFile('src/firstpage.html')
   // AnnoyingAsHellConfig(mainWindow)
 }
 
 function init(){
-  const fs = require('fs')
+  const fs  = require('fs')
   try {
     const data = fs.writeFileSync('stop_proctoring_features', 'false')
   } catch (err) {
@@ -43,15 +37,21 @@ function init(){
 }
 
 function AnnoyingAsHellConfig(w){
-  w.webContents.on("before-input-event", (event, input) => {
-    if( (input.alt && input.key == 'Tab'))
-    event.preventDefault()
-    console.log(input)
-  })
+  // w.webContents.on("before-input-event", (event, input) => {
+  //   if( (input.alt && input.key == 'Tab'))
+  //   event.preventDefault()
+  //   console.log(input)
+  // })
   w.show()
   w.setFullScreen(true)
   w.setAlwaysOnTop(true)
   w.on("blur",focusLoss)
+}
+
+function begone(w){
+  w.removeListener("blue", focusLoss)
+  w.setFullScreen(false)
+  w.setAlwaysOnTop(false)
 }
 
 function focusLoss(e){
@@ -71,15 +71,14 @@ function aggresiveTakeover(){
 
 
 
-app.on("before-input-event", (event, input) => {
-  console.log(input)
-})
+
 app.whenReady().then(() => {
   createWindow()
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
+
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
@@ -90,6 +89,19 @@ function endExam(){
 
 ipcMain.on("suicide", e => app.quit())
 
+ipcMain.on("start-exam", (e, token) => {
+
+  mainWindow.on("blur", screenshot_it)
+  // AnnoyingAsHellConfig(mainWindow)
+
+})
+
+ipcMain.on("end-exam", e => {
+  begone()
+  mainWindow.removeListener("blue", screenshot_it)
+  mainWindow.webCon
+}) 
+
 ipcMain.on("set-exam-timeout", (e, et) => {
   const end_time = new Date(et)
   const current_time = new Date()
@@ -97,3 +109,9 @@ ipcMain.on("set-exam-timeout", (e, et) => {
   console.log("App will time out at " + ((end_time - current_time)/1000/60) + " minutes")
   setTimeout(endExam, end_time - current_time)
 })
+
+function screenshot_it(e, token) {
+    const file_path = path.resolve("facial", "screenshots", `${token}_${Date()}.png`)
+    fs.appendFileSync(file_path, "", (e, d) => {if(e) console.log(e)})
+    screenshot({filename: file_path})
+}

@@ -8,5 +8,6 @@ facial/database/unknown
 facial/screenshots/*
 facial/conflict/noface/*
 facial/conflict/multiface/*
-
+facial/logs/
 __pycache__
+*.db

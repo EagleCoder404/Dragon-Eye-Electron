@@ -48,4 +48,4 @@ def gaze(frame, face_detector, face_landmarker):
                 COUNTER = 0
         maskright, rightpos= m.EyeTracking(frame, grayFrame, RightEyePoint)
         maskleft, leftpos = m.EyeTracking(frame, grayFrame, LeftEyePoint)
-        return [FRAME_COUNTER, leftpos, rightpos]
+        return [leftpos, rightpos]

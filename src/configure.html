@@ -24,7 +24,7 @@
 			<li id="tick3div">STEP 3<br/><img src="x-mark.png" id="tick3"></li>
 		</ul>
 		<div class='container p-3 text-center'>
-			<a href="exam.html" id='exam-button' class='d-none btn btn-lg btn-success'>Start Exam</a>
+			<a href="dressing_room.html" id='exam-button' class='d-none btn btn-lg btn-success'>Start Exam</a>
 		</div>
 		<h3>STEP 1</h3>
 		<div class="card card0 border-0" style="margin-bottom:5%;" id="div1">
@@ -85,8 +85,17 @@
 					<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
 					<script src="scripts/lemons.js"></script>
 					<script>
+
 					  const token = sessionStorage.getItem("token")
 					  const studentAPI = createStudentApi(token)
+					  const Database = require("nedb")
+					  const db = new Database({filename:"sessions.db", autoload:true})
+
+					  db.findOne( {_id:token}, (e, doc) => {
+						  if (doc.configured)
+						  	window.location = "dressing_room.html"
+					  })
+
 					  var imgname,imgurl;
 					  var files=[];
 					  var reader;
@@ -123,8 +132,6 @@
 					  input.click();
 						selected=true;
 					  }
-						
-
 					}
 					  
 					  
@@ -144,7 +151,10 @@
 									imgurl=url;
 									console.log("THIS ONE--=>"+imgurl);
 									studentAPI.post("/id_card", data={link:imgurl})
-									.then( r => swal("ID UPLOADED"))
+									.then( r => {
+										db.update({ _id:token }, { $set:{configured:true} })
+										swal("ID UPLOADED")
+									})
 									.catch(r => console.log("Error Occured With ID upload"))
 								
 							});

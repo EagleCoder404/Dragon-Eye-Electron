@@ -21,10 +21,23 @@
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<title>Configration setting</title>
+	<style>
+		#videoElement{
+			position: fixed;
+			bottom:0px;
+			right:0px;
+			width:150px;
+			height: 150px;
+			z-index: 100;
+		}
+	</style>
 	<link rel="stylesheet" href="styles/firstpage.css">
 </head>
 
 <body>
+	<video autoplay="true" id="videoElement">
+
+	</video>
 	<div class="container-fluid  my-3 mx-auto">
 		<div class="card card0 border-0 p-5">
 			<div class='exam-box '>
@@ -48,9 +61,16 @@
 
 	<script src="scripts/lemons.js"></script>
 	<script>
+		
 		const jq = require("jquery");
 		const {ipcRenderer} = require("electron");
 		const fs = require("fs")
+		let pf_promise = null;
+		try {
+		  const data = fs.writeFileSync('stop_proctoring_features', 'false')
+		} catch (err) {
+		  console.error(err)
+		}
 
 		//setTimeout(() => fs.writeFileSync('stop_proctoring_features', 'true'), 6000)
 		const token = sessionStorage.getItem("token")
@@ -58,28 +78,54 @@
 		let old_updates_list = {}
 
 		jq(document).ready(init)
-
+		
 		function submit(event){
 			event.preventDefault()
-			backend.get("/exam/submit").then( e => {
-				if(e.data.msg === "done")
-					window.location.href = "firstpage.html"
+			stopProctoring()
+			const csv = require("csvtojson");
+
+			console.log("waiting for python to end")
+			/*while(true){
+				if(pf_promise.terminated == true)
+					break
+				else
+					sleep(500)
+				console.log("Waiting")
+			} */
+			sleep(5000)
+			console.log("python ended")
+
+			csv().fromFile(`facial/logs/${token}.log`)
+			.then(log_json => {
+				
+				backend.post("/exam/submit", { log_json: log_json} , {
+					headers:{
+						"Content-Type":"application/json"
+					}
+				}).then( e => {
+					if(e.data.msg === "done");
+						window.location.href = "firstpage.html"
+				})
 			})
 
 		}
+
 		async function init() {
 			const data = await getAllQuestionData()
 			if (data == null)
 				return;
 			console.log("Fetched Question Data")
 			try{
-				runPython("facial/exam_background.py", [])
+				pf_promise = runPython("facial/exam_background.py", [token])
 			} catch {
 				console.log("Enabling Proctor Features Failed")
 			}
 			console.log("Proctoring Enabled")
+			sleep(5000)
 			const end_time = sessionStorage.getItem("end_time")
 			ipcRenderer.send("set-exam-timeout", end_time)
+			ipcRenderer.send("start-exam", token)
+
 			console.log("Exam timeout set")
 			const n = createQuestions(data)
 			console.log("question rendered")
@@ -154,9 +200,12 @@
 			}
 		}
 		window.onbeforeunload = function () {
-			fs.writeFileSync('stop_proctoring_features', 'true')
+			stopProctoring()
 			console.log("Stopped Procotring")
 		}
+
+
+
 	</script>
 </body>
 

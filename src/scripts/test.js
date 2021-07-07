@@ -1,4 +1,5 @@
 
+
 function configure(){
 	document.getElementById("config").innerHTML="Hang On...";
     const {PythonShell} = require("python-shell")
