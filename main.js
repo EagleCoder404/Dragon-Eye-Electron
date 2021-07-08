@@ -28,12 +28,7 @@ function createWindow () {
 }
 
 function init(){
-  const fs  = require('fs')
-  try {
-    const data = fs.writeFileSync('stop_proctoring_features', 'false')
-  } catch (err) {
-    console.error(err)
-  }
+
 }
 
 function AnnoyingAsHellConfig(w){
@@ -49,7 +44,7 @@ function AnnoyingAsHellConfig(w){
 }
 
 function begone(w){
-  w.removeListener("blue", focusLoss)
+  w.removeListener("blur", focusLoss)
   w.setFullScreen(false)
   w.setAlwaysOnTop(false)
 }
@@ -92,14 +87,14 @@ ipcMain.on("suicide", e => app.quit())
 ipcMain.on("start-exam", (e, token) => {
 
   mainWindow.on("blur", screenshot_it)
-  // AnnoyingAsHellConfig(mainWindow)
+  AnnoyingAsHellConfig(mainWindow)
 
 })
 
 ipcMain.on("end-exam", e => {
-  begone()
-  mainWindow.removeListener("blue", screenshot_it)
-  mainWindow.webCon
+  begone(mainWindow)
+  mainWindow.removeListener("blur", screenshot_it)
+  mainWindow.unmaximize()
 }) 
 
 ipcMain.on("set-exam-timeout", (e, et) => {

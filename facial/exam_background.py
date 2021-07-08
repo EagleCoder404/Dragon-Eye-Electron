@@ -76,8 +76,9 @@ def main(frame):
             face_name = False
         else:
             face_name = True
-        face_alignement = face_alignment_detector(frame, hog_detector, landmarker)
-        eye_position = gaze(frame, hog_detector, landmarker)[0]
+        if face_name:
+            face_alignement = face_alignment_detector(frame, hog_detector, landmarker)
+            eye_position = gaze(frame, hog_detector, landmarker)
         
     main_log.log([face_detected, multiple_face, face_name, face_alignement, eye_position])
     print([face_detected, multiple_face, face_name, face_alignement, eye_position])

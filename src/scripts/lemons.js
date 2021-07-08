@@ -17,7 +17,7 @@ function createStudentApi(token){
 	});
 	return axios_instance
 }
-done=false
+
 function runPython(path, args){
     const {PythonShell} = require("python-shell")
 
@@ -28,7 +28,6 @@ function runPython(path, args){
 	return PythonShell.run(path, options, function (err, results) {
 		if (err){ ; console.log(results); throw err;}
 		console.log(results);
-		done=true
 	});
 }
 

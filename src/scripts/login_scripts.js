@@ -21,7 +21,7 @@ function login(){
 
             db.find({_id:token},(err, docs) => {
                 if (docs.length == 0)
-                    db.insert({_id:token, configured:false})
+                    db.insert({_id:token, configured:false, attempts:0})
             })
 
             const ps = response.data

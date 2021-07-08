@@ -61,21 +61,23 @@
 
 	<script src="scripts/lemons.js"></script>
 	<script>
-		
+		const Datastore = require("nedb")
+		const { ipcRenderer } = require("electron");
 		const jq = require("jquery");
-		const {ipcRenderer} = require("electron");
 		const fs = require("fs")
+		
+		const db = new Datastore({filename:"sessions.db", autoload:true})
+		const token = sessionStorage.getItem("token")
+		const backend = createStudentApi(token)
 		let pf_promise = null;
+		let old_updates_list = {}
+
 		try {
 		  const data = fs.writeFileSync('stop_proctoring_features', 'false')
 		} catch (err) {
 		  console.error(err)
 		}
 
-		//setTimeout(() => fs.writeFileSync('stop_proctoring_features', 'true'), 6000)
-		const token = sessionStorage.getItem("token")
-		const backend = createStudentApi(token)
-		let old_updates_list = {}
 
 		jq(document).ready(init)
 		
@@ -85,13 +87,6 @@
 			const csv = require("csvtojson");
 
 			console.log("waiting for python to end")
-			/*while(true){
-				if(pf_promise.terminated == true)
-					break
-				else
-					sleep(500)
-				console.log("Waiting")
-			} */
 			sleep(5000)
 			console.log("python ended")
 
@@ -104,7 +99,10 @@
 					}
 				}).then( e => {
 					if(e.data.msg === "done");
+					{
+						ipcRenderer.send("end-exam")
 						window.location.href = "firstpage.html"
+					}
 				})
 			})
 
@@ -112,29 +110,28 @@
 
 		async function init() {
 			const data = await getAllQuestionData()
-			if (data == null)
-				return;
+			if (data == null) return;
 			console.log("Fetched Question Data")
-			try{
-				pf_promise = runPython("facial/exam_background.py", [token])
-			} catch {
-				console.log("Enabling Proctor Features Failed")
-			}
+			
+			runPython("facial/exam_background.py", [token])
 			console.log("Proctoring Enabled")
+			
 			sleep(5000)
+			
 			const end_time = sessionStorage.getItem("end_time")
+			
 			ipcRenderer.send("set-exam-timeout", end_time)
 			ipcRenderer.send("start-exam", token)
 
-			console.log("Exam timeout set")
 			const n = createQuestions(data)
-			console.log("question rendered")
 			old_updates_list = new Array(n)
 			if ( data.data?.answer_data !== undefined ) {
 				const ad = data.data.answer_data
 				for (let i = 0; i < ad.length; i++)
 					old_updates_list[i] = ad[i].answer
 			}
+
+			//db.update({_id:token}, {$inc:{attempts}})
 			jq(".exam-questions-box .answer-input").focusout(dynamicUpdate)
 		}
 
