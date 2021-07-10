@@ -12,8 +12,9 @@ let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 1000,
+    // width: 600,
+    // height: 600,
+    transparent:true,
     frame:false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -23,7 +24,7 @@ function createWindow () {
   })
   // and load the index.html of the app.
   init()
-  mainWindow.loadFile('src/firstpage.html')
+  mainWindow.loadFile('src/login.html')
   // AnnoyingAsHellConfig(mainWindow)
 }
 
@@ -86,8 +87,8 @@ ipcMain.on("suicide", e => app.quit())
 
 ipcMain.on("start-exam", (e, token) => {
 
-  mainWindow.on("blur", screenshot_it)
-  AnnoyingAsHellConfig(mainWindow)
+  // mainWindow.on("blur", screenshot_it)
+  // AnnoyingAsHellConfig(mainWindow)
 
 })
 

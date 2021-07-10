@@ -22,12 +22,14 @@
 		crossorigin="anonymous"></script>
 	<title>Configration setting</title>
 	<style>
-		#videoElement{
+		#countdown{
 			position: fixed;
-			bottom:0px;
+			top:0px;
 			right:0px;
-			width:150px;
-			height: 150px;
+			padding:8px 32px;
+			font-size: 30px;
+			background-color: white;
+			border:2px solid red;
 			z-index: 100;
 		}
 	</style>
@@ -35,9 +37,9 @@
 </head>
 
 <body>
-	<video autoplay="true" id="videoElement">
-
-	</video>
+	<div id="countdown">
+		00:00:00
+	</div>
 	<div class="container-fluid  my-3 mx-auto">
 		<div class="card card0 border-0 p-5">
 			<div class='exam-box '>
@@ -58,9 +60,10 @@
 				<input type="text" placeholder="Enter Answer Here" class='answer-input'>
 		</div>
 	</div>
-
+	<script src="../node_modules/easytimer/dist/easytimer.min.js"></script>
 	<script src="scripts/lemons.js"></script>
 	<script>
+		var timer = new Timer();
 		const Datastore = require("nedb")
 		const { ipcRenderer } = require("electron");
 		const jq = require("jquery");
@@ -119,7 +122,13 @@
 			sleep(5000)
 			
 			const end_time = sessionStorage.getItem("end_time")
-			
+			const end_date = new Date(end_time)
+			const now = new Date()
+			duration_in_seconds = Math.floor(Math.abs(now - end_date)/1000)
+			timer.start({ countdown:true, startValues:{seconds: duration_in_seconds}, callback: t => {
+				jq("#countdown").html(timer.getTimeValues().toString(['hours', 'minutes', 'seconds']))
+				console.log("tick")
+			}})
 			ipcRenderer.send("set-exam-timeout", end_time)
 			ipcRenderer.send("start-exam", token)
 

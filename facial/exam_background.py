@@ -78,6 +78,7 @@ def main(frame):
             face_name = True
         if face_name:
             face_alignement = face_alignment_detector(frame, hog_detector, landmarker)
+            # face_alg
             eye_position = gaze(frame, hog_detector, landmarker)
         
     main_log.log([face_detected, multiple_face, face_name, face_alignement, eye_position])
@@ -91,7 +92,7 @@ while True:
         break
     ret, frame = cam.read()
     main(frame)
-    # time.sleep(0.3)
+    # time.sleep(0.5)
     # key = cv2.waitKey(1) & 0xFF
     # if key == ord('q'):
     #     break

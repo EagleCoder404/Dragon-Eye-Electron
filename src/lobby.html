@@ -8,32 +8,54 @@
     <script src="../assets/js/moment-with-locales.js"></script>
     <script src="../assets/js/jquery.js" type="text/javascript"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/5b343f1578.js" crossorigin="anonymous"></script>
     <script>if (window.module) module = window.module;</script>
     <title>Lobby</title>
 </head>
-<body>
+<body class='m-0 p-0 bg-white border-4 border-blue-400 overflow-hidden h-screen'>
 
-    <div class="max-w-2xl mx-auto">
-        <div class='mx-auto max-w-lg border rounded-md border-green-400 mt-6'>
-            <div class=" p-6 text-3xl font-bold border-b text-gray-500 border-green-400 rounded-t-md ">
+    <div class="bg-blue-400 p-3">
+        <div class='flex flex-row justify-between'>
+            <h1 class="text-4xl font-bold text-white">
+                Lobby
+            </h1>
+            <button class='px-4 py-2 rounded-md bg-green-400 text-white font-bold transition hover:bg-green-300 ease-in-out'>
+                Go Back
+            </button>
+        </div>
+    </div>
+
+    <div class='p-16'>
+
+        <div class='mx-auto max-w-2xl border rounded-md border-green-400'>
+
+            <div class=" p-6 text-3xl font-bold border-b text-white bg-green-400 ">
                 <h1 id='session_name'>
-
+    
                 </h1>
             </div>
-            <div class=" p-6 flex flex-col space-y-3">
-                <div class="font-light">
-                    Start Time <span id='start_time'></span>
-                </div>
-                <div class="font-light">
-                    End Time <span id='end_time'></span>
-                </div>
 
+            <div class=" p-6 flex flex-col space-y-6 m">
+                <div class='flex flex-col  space-y-3'>
+                    <div class="font-light">
+                       <span class='font-semibold'> Start Time </span>  <span id='start_time' class=''></span>
+                    </div>
+                    <div class="font-light">
+                        <span class='font-semibold'> End Time </span><span id='end_time' class=''></span>
+                    </div>
+                </div>
+    
                 <div class='flex flex-row space-x-3'>
-                    <button class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400">Set Reminder</button>
-                    <a class="px-7 rounded-md py-3 bg-green-300 hover:bg-green-400" href='configure.html' id='joinBtn'>Join</a>
+                    <button class="px-4 rounded-md py-2 bg-green-300 hover:bg-green-400 transition ease-in-out">
+                        Set Reminder
+                        <i class='fa fa-camera-retro'></i>
+                    </button>
+                    <a class="px-4 rounded-md py-2 bg-green-300 hover:bg-green-400 transition ease-in-out" href='configure.html' id='joinBtn'>Join</a>
                 </div>
             </div>
+
         </div>
+
     </div>
 
     <script>

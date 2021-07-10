@@ -1,23 +1,28 @@
-`<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class='rounded-lg'>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <title>Student Login</title>
 </head>
-<body class="rounded-lg">
-    <div class='max-w-max  p-3 border-black mx-auto my-20'>
-        <div class='flex flex-col space-y-3'>
+<body class="m-0 p-0 bg-white border-4 border-blue-400 overflow-hidden h-screen">
 
+    <div class="bg-blue-400 p-3">
+        <h1 class="text-4xl font-bold text-white">
+            Student Login
+        </h1>
+    </div>
+    <div class='max-w-max  p-3 border-black mx-auto my-32'>
+        <div class='flex flex-col space-y-3'>
             <div class='flex flex-row space-x-3'>
-                    <input type="text" id='token' class="px-5 py-3 border-2 rounded-md w-96 border-red-700 focus:outline-none" placeholder="Enter Token">
-                    <button class="rounded-md bg-red-700 text-white px-7 py-3 font-bold" onclick="login()">Login</button>
+                <input type="text" id='token' class="px-5 py-3 border-2 rounded-md w-96 border-red-700 focus:outline-none" placeholder="Enter Token">
+                <button class="rounded-md bg-red-700 text-white px-7 py-3 font-bold" onclick="login()">Login</button>
             </div>
         </div>
     </div>
-
-    <script src="/src/scripts/login_scripts.js"></script>
+    
+    <script src="scripts/lemons.js"></script>
+    <script src="scripts/login_scripts.js"></script>
 </body>
 </html>
