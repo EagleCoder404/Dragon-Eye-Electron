@@ -43,8 +43,11 @@
 		<div class="card card0 border-0"  id="div2" style="margin-bottom:5%;">
 			<div style="width:90%;margin:5% auto;text-align:center">
 				<h2 style="margin-bottom:2%;">Training your face</h2>
-				
-				<button type="submit" class="btn btn-blue text-center" id="face" onclick="training()">start</button>
+				<div style="display:flex; flex-direction:row;justify-content:center;" class='text-center'>
+					<button type="submit" class="btn btn-blue m-2 text-center" id="face" onclick="training()">start</button>
+					<button type="submit" class="btn btn-blue m-2 text-center" onclick="skipTrain()">Skip Training</button>
+				</div>
+
 				<div style="width:90%;height:200px;margin: 2% auto;background-color:black;color:white">
 					<p>Training logs will appear here</p>
 					<p>>> Make sure, you follow instruction very carefully. You will hear audio guidance regarding the movement of face. Try to be precise, 
@@ -84,6 +87,13 @@
 					<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
 					<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-storage.js"></script>
 					<script src="scripts/lemons.js"></script>
+					<script>
+					function skipTrain() {
+						document.getElementById("face").style.visibility="hidden"
+						document.getElementById("face").style.display="none"
+
+					}
+					</script>
 					<script>
 
 					  const token = sessionStorage.getItem("token")
@@ -137,7 +147,7 @@
 					  
 					document.getElementById('upload').onclick=function(){
 						if(selected){	
-						imgname="sample1";
+						imgname=token
 						var uploadtask=firebase.storage().ref("Images/"+imgname+".png").put(files[0]);
 						uploadtask.on('state_changed',function(snapshot){
 							var progress=(snapshot.bytesTransferred/snapshot.totalBytes)*100;
@@ -170,7 +180,7 @@
 
 					};
 					
-					
+
 					</script>
 				</div>
 				</div>
